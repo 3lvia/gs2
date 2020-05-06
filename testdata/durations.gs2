@@ -1,0 +1,48 @@
+##Start-message
+#Id=0
+#Message-type=Settlement-data
+#Version=1.2
+#Time=2020-03-27.00:00:00
+#To=MDM
+#From=Sender
+#GMT-reference=2
+
+##Time-series
+#Reference=meterpoint1
+#Start=2020-03-27.00:00:00
+#Stop=2020-03-27.10:00:00
+#Step=0000-00-00.01:00:00
+#Value=< 1 2 3 4 5 6 7 8 9 10 >
+#No-of-values=10
+#Sum=55
+
+##Time-series
+#Reference=meterpoint2
+#Start=2020-03-27.00:00:00
+#Stop=2020-03-27.10:00:00
+#Step=0000-00-00.02:00:00
+#Value=< 0.001 0.002 0.003 0.004 0.005 >
+#No-of-values=5
+#Sum=0.015
+
+##Time-series
+#Reference=meterpoint3
+#Start=2020-03-27.00:00:00
+#Stop=2020-03-27.01:00:00
+#Step=0000-00-00.00:15:00
+#Value=< 10001.01 10002.02 1003.03 1004.04 >
+#No-of-values=4
+#Sum=22010.1
+
+##Time-series
+#Reference=meterpoint4
+#Start=2020-03-27.00:00:00
+#Stop=2020-03-27.00:00:05
+#Step=0000-00-00.00:00:01
+#Value=< 1.1 2.2 3.3 4.4 5.5 >
+#No-of-values=5
+#Sum=16.5
+
+##End-message
+#Id=0
+#Number-of-objects=6
