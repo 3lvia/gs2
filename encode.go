@@ -116,13 +116,19 @@ func (e *Encoder) block(v reflect.Value) error {
 	for i := 0; i < indirect.NumField(); i++ {
 		field := indirect.Field(i)
 
-		attributeName, exists := indirect.Type().Field(i).Tag.Lookup("gs2")
+		tag, exists := indirect.Type().Field(i).Tag.Lookup("gs2")
 		if !exists {
 			return fmt.Errorf("type %s does not have a gs2 tag defined", indirect.Type().Field(i).Type)
 		}
 
-		// TODO: Add omitempty/required tags. This is a temporary hack to print sums that are 0.0.
-		if field.IsZero() && attributeName != "Sum" {
+		split := strings.Split(tag, ",")
+		attributeName := split[0]
+		if attributeName == "" {
+			return fmt.Errorf("couldn't find name for type %s", indirect.Type().Field(i).Type)
+		}
+
+		omitempty := len(split) > 1 && split[1] == "omitempty"
+		if field.IsZero() && omitempty {
 			continue
 		}
 

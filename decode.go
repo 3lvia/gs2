@@ -376,7 +376,8 @@ func getField(key string, typ reflect.Type) (int, bool) {
 	}
 
 	for i := 0; i < typ.NumField(); i++ {
-		if strings.EqualFold(key, typ.Field(i).Tag.Get("gs2")) {
+		tag := typ.Field(i).Tag.Get("gs2")
+		if strings.EqualFold(key, strings.Split(tag, ",")[0]) {
 			if typeCached {
 				cachedTyp.(map[string]int)[key] = i
 			} else {
