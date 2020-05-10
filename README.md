@@ -1,7 +1,7 @@
 # GS2 decoder/encoder
 Tool for decoding and encoding data according to the GS2 format (https://sintef.brage.unit.no/sintef-xmlui/handle/11250/2391930).
 
-Current version is mostly forgiving. Mainly because there in pratice is a a lot of variation in the applications of this format.
+Current version is mostly forgiving. Mainly because there is a a lot of variation in the applications of this format in pratice.
 
 Inspired by go json decoding/encoding, but does not support custom types as of yet. 
 
