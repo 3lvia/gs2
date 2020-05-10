@@ -42,8 +42,8 @@ func EncodeFloatPrecision(i int) EncoderOption {
 
 // EncodeValidators sets the validators to be run before encoding an object. Will overwrite the default ones. So remeber to add
 // the defaults as well if needed.
-func EncodeValidators(v ...Validator) DecoderOption {
-	return func(o *decoderOptions) {
+func EncodeValidators(v ...Validator) EncoderOption {
+	return func(o *encoderOptions) {
 		o.validators = v
 	}
 }
