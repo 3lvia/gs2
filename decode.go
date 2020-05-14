@@ -252,7 +252,7 @@ loop:
 	case reflect.Struct:
 		switch indirect.Type() {
 		case reflect.TypeOf((*time.Time)(nil)).Elem():
-			t, err := time.Parse(gs2TimeLayout, string(value))
+			t, err := parseTime(string(value))
 			if err != nil {
 				return err
 			}
@@ -392,6 +392,50 @@ func getField(key string, typ reflect.Type) (int, bool) {
 	return 0, false
 }
 
+func parseTriplet(val string) (Triplet, error) {
+	split := strings.Split(val, "/")
+
+	var v float64
+	var t time.Time
+	var q string
+	var err error
+
+	if len(split) > 0 && split[0] != "" {
+		v, err = strconv.ParseFloat(split[0], 64)
+		if err != nil {
+			return Triplet{}, err
+		}
+	}
+
+	if len(split) > 1 && split[1] != "" {
+		t, err = parseTime(split[1])
+		if err != nil {
+			return Triplet{}, err
+		}
+	}
+
+	if len(split) > 2 && split[2] != "" {
+		q = split[2]
+	}
+
+	return Triplet{
+		Value:   v,
+		Time:    t,
+		Quality: q,
+	}, nil
+}
+
+func parseTime(s string) (time.Time, error) {
+	var modifier time.Duration
+	if strings.Contains(s, "24:00:00") {
+		s = strings.Replace(s, "24:00:00", "00:00:00", 1)
+		modifier = 24 * time.Hour
+	}
+
+	t, err := time.Parse(gs2TimeLayout, s)
+	return t.Add(modifier), err
+}
+
 func parseDuration(s string) (time.Duration, error) {
 	split := strings.Split(s, ".")
 	tp := strings.Split(split[1], ":")
@@ -414,37 +458,4 @@ func parseDuration(s string) (time.Duration, error) {
 	}
 
 	return time.Duration(hours)*time.Hour + time.Duration(minutes)*time.Minute + time.Duration(seconds)*time.Second, nil
-}
-
-func parseTriplet(val string) (Triplet, error) {
-	split := strings.Split(val, "/")
-
-	var v float64
-	var t time.Time
-	var q string
-	var err error
-
-	if len(split) > 0 && split[0] != "" {
-		v, err = strconv.ParseFloat(split[0], 64)
-		if err != nil {
-			return Triplet{}, err
-		}
-	}
-
-	if len(split) > 1 && split[1] != "" {
-		t, err = time.Parse(gs2TimeLayout, split[1])
-		if err != nil {
-			return Triplet{}, err
-		}
-	}
-
-	if len(split) > 2 && split[2] != "" {
-		q = split[2]
-	}
-
-	return Triplet{
-		Value:   v,
-		Time:    t,
-		Quality: q,
-	}, nil
 }

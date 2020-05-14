@@ -23,7 +23,7 @@
 #Reference=meterpoint2
 #Non-existing-attribute=nonExistingValue
 #Start=2020-03-27.00:00:00
-#Stop=2020-03-28.00:00:00
+#Stop=2020-03-27.24:00:00
 #Step=0000-00-00.01:00:00
 #Unit=kWh
 #Type-of-value=interval
