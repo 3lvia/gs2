@@ -426,6 +426,10 @@ func parseTriplet(val string) (Triplet, error) {
 }
 
 func parseTime(s string) (time.Time, error) {
+	if s == "" {
+		return time.Time{}, nil
+	}
+
 	var modifier time.Duration
 	if strings.Contains(s, "24:00:00") {
 		s = strings.Replace(s, "24:00:00", "00:00:00", 1)

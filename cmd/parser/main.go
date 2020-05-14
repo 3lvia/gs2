@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"flag"
 	"fmt"
 	"github.com/rejlersembriq/gs2"
@@ -11,6 +10,15 @@ import (
 )
 
 var filename = flag.String("file", "", "File to parse")
+
+func validateTime(g *gs2.GS2) error {
+	for _, ts := range g.TimeSeries {
+		if ts.Start.Add(time.Duration(ts.NoOfValues)*ts.Step) != ts.Stop {
+			return fmt.Errorf("start %q, stop %q step %q doesnt match", ts.Start.Format(time.RFC3339), ts.Stop.Format(time.RFC3339), ts.Step)
+		}
+	}
+	return nil
+}
 
 func main() {
 	flag.Parse()
@@ -26,20 +34,20 @@ func main() {
 
 	start := time.Now()
 
-	result, err := gs2.NewDecoder(file).Decode()
+	options := []gs2.DecoderOption{
+		gs2.DecodeValidators(
+			gs2.ValidateNoOfObjects,
+			gs2.ValidateTimeSeriesValues,
+			validateTime,
+		),
+	}
+
+	_, err = gs2.NewDecoder(file, options...).Decode()
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	took := time.Since(start)
-
-	indent, err := json.MarshalIndent(result, "", "    ")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	fmt.Println("")
-	fmt.Println(string(indent))
 
 	fmt.Printf("Parsing took: %v\n", took)
 }
