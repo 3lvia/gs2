@@ -7,15 +7,12 @@ import (
 	"reflect"
 	"strconv"
 	"strings"
-	"sync"
 	"time"
 )
 
 const gs2TimeLayout = "2006-01-02.15:04:05"
 
 const scanEnd = -1
-
-var typeCache sync.Map
 
 // Decoder reads and decodes GS2 input. NB: year, month and day is not supported in Step attribute. Only hour, minute and seconds
 // are used when decoding duration.
@@ -27,6 +24,7 @@ type Decoder struct {
 	bytesRead     int
 	lastByteRead  byte
 	lastScanState int
+	typeCache     map[reflect.Type]map[string]int
 }
 
 type decoderOptions struct {
@@ -60,9 +58,10 @@ func NewDecoder(r io.Reader, opt ...DecoderOption) *Decoder {
 	}
 
 	return &Decoder{
-		options: opts,
-		rdr:     r,
-		scan:    newScanner(),
+		options:   opts,
+		rdr:       r,
+		scan:      newScanner(),
+		typeCache: make(map[reflect.Type]map[string]int),
 	}
 }
 
@@ -130,7 +129,7 @@ loop:
 		}
 	}
 
-	field, exists := getField(string(blockName), reflect.Indirect(v).Type())
+	field, exists := d.getField(string(blockName), reflect.Indirect(v).Type())
 	if !exists {
 		d.skipBlock()
 		return nil
@@ -177,7 +176,7 @@ loop:
 		}
 	}
 
-	field, exists := getField(string(attributeName), reflect.Indirect(v).Type())
+	field, exists := d.getField(string(attributeName), reflect.Indirect(v).Type())
 	if !exists {
 		d.skipAttribute()
 		return nil
@@ -366,10 +365,10 @@ func (d *Decoder) skipAttribute() {
 	d.scanWhile(scanHash)
 }
 
-func getField(key string, typ reflect.Type) (int, bool) {
-	cachedTyp, typeCached := typeCache.Load(typ)
-	if typeCached {
-		index, exists := cachedTyp.(map[string]int)[key]
+func (d *Decoder) getField(key string, typ reflect.Type) (int, bool) {
+	cachedTyp, isCached := d.typeCache[typ]
+	if isCached {
+		index, exists := cachedTyp[key]
 		if exists {
 			return index, true
 		}
@@ -378,12 +377,12 @@ func getField(key string, typ reflect.Type) (int, bool) {
 	for i := 0; i < typ.NumField(); i++ {
 		tag := typ.Field(i).Tag.Get("gs2")
 		if strings.EqualFold(key, strings.Split(tag, ",")[0]) {
-			if typeCached {
-				cachedTyp.(map[string]int)[key] = i
+			if isCached {
+				cachedTyp[key] = i
 			} else {
 				m := make(map[string]int)
 				m[key] = i
-				typeCache.Store(typ, m)
+				d.typeCache[typ] = m
 			}
 
 			return i, true
