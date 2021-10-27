@@ -49,19 +49,20 @@ type EndMessage struct {
 
 // MeterReading contains a single value that is a channel reading at a given point in time.
 type MeterReading struct {
-	Reference     string    `gs2:"Reference,omitempty"`
-	Time          time.Time `gs2:"Time,omitempty"`
-	Unit          string    `gs2:"Unit,omitempty"`
-	Value         Triplet   `gs2:"Value"`
-	Installation  string    `gs2:"Installation,omitempty"`
-	Plant         string    `gs2:"Plant,omitempty"`
-	MeterLocation string    `gs2:"Meter-location,omitempty"`
-	NetOwner      string    `gs2:"Net-owner,omitempty"`
-	Supplier      string    `gs2:"Supplier,omitempty"`
-	Customer      string    `gs2:"Customer,omitempty"`
-	Meter         string    `gs2:"Meter,omitempty"`
-	Channel       string    `gs2:"Channel,omitempty"`
-	Description   string    `gs2:"Description,omitempty"`
+	Reference       string    `gs2:"Reference,omitempty"`
+	Time            time.Time `gs2:"Time,omitempty"`
+	Unit            string    `gs2:"Unit,omitempty"`
+	Value           Triplet   `gs2:"Value"`
+	Installation    string    `gs2:"Installation,omitempty"`
+	Plant           string    `gs2:"Plant,omitempty"`
+	MeterLocation   string    `gs2:"Meter-location,omitempty"`
+	NetOwner        string    `gs2:"Net-owner,omitempty"`
+	Supplier        string    `gs2:"Supplier,omitempty"`
+	Customer        string    `gs2:"Customer,omitempty"`
+	Meter           string    `gs2:"Meter,omitempty"`
+	Channel         string    `gs2:"Channel,omitempty"`
+	Description     string    `gs2:"Description,omitempty"`
+	DirectionOfFlow string    `gs2:"Direction-of-flow,omitempty"`
 }
 
 // TimeSeries contains time series of metered values within the interval given by start and stop.

@@ -73,10 +73,11 @@ var decodeTestTable = []struct {
 			},
 			MeterReadings: []MeterReading{
 				{
-					Reference: "meterpoint1",
-					Meter:     "meter1",
-					Time:      getTime("2019-07-19T01:00:00Z"),
-					Unit:      "kWh",
+					Reference:       "meterpoint1",
+					Meter:           "meter1",
+					Time:            getTime("2019-07-19T01:00:00Z"),
+					Unit:            "kWh",
+					DirectionOfFlow: "out",
 					Value: Triplet{
 						Value:   84.831,
 						Quality: "0",

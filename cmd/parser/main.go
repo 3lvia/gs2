@@ -3,10 +3,11 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/rejlersembriq/gs2"
 	"log"
 	"os"
 	"time"
+
+	"github.com/3lvia/gs2"
 )
 
 var filename = flag.String("file", "", "File to parse")
@@ -18,6 +19,16 @@ func validateTime(g *gs2.GS2) error {
 		}
 	}
 	return nil
+}
+
+func validateMeterReadings(g *gs2.GS2) bool {
+	for _, mr := range g.MeterReadings {
+		if mr.DirectionOfFlow == "out" || mr.DirectionOfFlow == "in" {
+			return true
+		}
+	}
+
+	return false
 }
 
 func main() {
@@ -42,7 +53,14 @@ func main() {
 		),
 	}
 
-	_, err = gs2.NewDecoder(file, options...).Decode()
+	var result = &gs2.GS2{}
+
+	result, err = gs2.NewDecoder(file, options...).Decode()
+
+	if validateMeterReadings(result) {
+		fmt.Println("Meterreading has direction of flow")
+	}
+
 	if err != nil {
 		log.Fatal(err)
 	}
