@@ -84,9 +84,11 @@ func stateValue(s *scanner, b byte) int {
 }
 
 func stateArray(s *scanner, b byte) int {
-	switch b {
-	case ' ':
+	if unicode.IsSpace(rune(b)) {
 		return scanArraySeparator
+	}
+
+	switch b {
 	case '>':
 		s.step = stateBeginScan
 		return scanArrayEnd
