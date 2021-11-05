@@ -211,6 +211,7 @@ loop:
 		switch d.lastScanState {
 		case scanContinue:
 			value = append(value, d.lastByteRead)
+
 		case scanSkipSpace:
 		case scanHash:
 			break loop
