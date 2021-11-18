@@ -436,7 +436,8 @@ func parseTime(s string) (time.Time, error) {
 		modifier = 24 * time.Hour
 	}
 
-	t, err := time.Parse(gs2TimeLayout, s)
+	norwegianLocation, err := time.LoadLocation("Europe/Oslo")
+	t, err := time.ParseInLocation(gs2TimeLayout, s, norwegianLocation)
 	return t.Add(modifier), err
 }
 
