@@ -425,7 +425,7 @@ func parseTriplet(val string) (Triplet, error) {
 	}, nil
 }
 
-func parseTime(s string, location time.Location) (time.Time, error) {
+func parseTime(s string) (time.Time, error) {
 	if s == "" {
 		return time.Time{}, nil
 	}
