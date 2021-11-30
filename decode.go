@@ -80,6 +80,19 @@ func (d *Decoder) Decode() (*GS2, error) {
 		}
 	}
 
+	// fmt.Printf("Before parsing %v\n", result)
+
+	var gmtReference = result.StartMessage.GMTReference
+	for i := range result.MeterReadings {
+		result.MeterReadings[i].Time = result.MeterReadings[i].Time.Add(time.Hour * time.Duration(gmtReference))
+	}
+
+	for i := range result.TimeSeries {
+		result.TimeSeries[i].Start = result.TimeSeries[i].Start.Add(time.Hour * time.Duration(gmtReference))
+		result.TimeSeries[i].Stop = result.TimeSeries[i].Stop.Add(time.Hour * time.Duration(gmtReference))
+	}
+
+	// fmt.Printf("After parsing %v\n", result)
 	return result, nil
 }
 
@@ -436,8 +449,7 @@ func parseTime(s string) (time.Time, error) {
 		modifier = 24 * time.Hour
 	}
 
-	norwegianLocation, err := time.LoadLocation("Europe/Oslo")
-	t, err := time.ParseInLocation(gs2TimeLayout, s, norwegianLocation)
+	t, err := time.Parse(gs2TimeLayout, s)
 	return t.Add(modifier), err
 }
 

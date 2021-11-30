@@ -1,6 +1,7 @@
 package gs2
 
 import (
+	"fmt"
 	"os"
 	"reflect"
 	"testing"
@@ -23,6 +24,20 @@ func TestDecoder_Decode(t *testing.T) {
 			t.Errorf("result does not equal expected in test %d from table", i)
 		}
 	}
+}
+
+func TestDecoder_ReadFile(t *testing.T) {
+	file, err := os.Open("testdata/QM_AT20211018.gs2")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	result, err := NewDecoder(file).Decode()
+	if err != nil {
+		t.Fatalf("unexpected error when decoding: %v", err)
+	}
+
+	fmt.Printf("%v\n", result)
 }
 
 // This is probably stupid since we're also reading the file and stuff. Maybe there is some other way to benchmark?
@@ -75,7 +90,7 @@ var decodeTestTable = []struct {
 				{
 					Reference:       "meterpoint1",
 					Meter:           "meter1",
-					Time:            getTime("2019-07-19T01:00:00Z"),
+					Time:            getTime("2019-07-19T02:00:00Z"),
 					Unit:            "kWh",
 					DirectionOfFlow: "out",
 					Value: Triplet{
@@ -87,7 +102,7 @@ var decodeTestTable = []struct {
 				{
 					Reference: "meterpoint2",
 					Meter:     "meter2",
-					Time:      getTime("2019-07-19T02:00:00Z"),
+					Time:      getTime("2019-07-19T03:00:00Z"),
 					Unit:      "kWh",
 					Value: Triplet{
 						Value:   85.078,
@@ -98,7 +113,7 @@ var decodeTestTable = []struct {
 				{
 					Reference: "meterpoint3",
 					Meter:     "meter3",
-					Time:      getTime("2019-07-19T03:00:00Z"),
+					Time:      getTime("2019-07-19T04:00:00Z"),
 					Unit:      "kVArh",
 					Value: Triplet{
 						Value:   85.325,
@@ -130,8 +145,8 @@ var decodeTestTable = []struct {
 			TimeSeries: []TimeSeries{
 				{
 					Reference:       "meterpoint1",
-					Start:           getTime("2020-03-27T00:00:00Z"),
-					Stop:            getTime("2020-03-28T00:00:00Z"),
+					Start:           getTime("2020-03-27T01:00:00Z"),
+					Stop:            getTime("2020-03-28T01:00:00Z"),
 					Step:            time.Hour,
 					Unit:            "kWh",
 					TypeOfValue:     "interval",
@@ -167,8 +182,8 @@ var decodeTestTable = []struct {
 				},
 				{
 					Reference:       "meterpoint2",
-					Start:           getTime("2020-03-27T00:00:00Z"),
-					Stop:            getTime("2020-03-28T00:00:00Z"),
+					Start:           getTime("2020-03-27T01:00:00Z"),
+					Stop:            getTime("2020-03-28T01:00:00Z"),
 					Step:            time.Hour,
 					Unit:            "kWh",
 					TypeOfValue:     "interval",
@@ -206,8 +221,8 @@ var decodeTestTable = []struct {
 					Unit:            "kWh",
 					DirectionOfFlow: "out",
 					Meter:           "meter3",
-					Start:           getTime("2020-03-26T23:00:00Z"),
-					Stop:            getTime("2020-03-27T23:00:00Z"),
+					Start:           getTime("2020-03-27T00:00:00Z"),
+					Stop:            getTime("2020-03-28T00:00:00Z"),
 					Step:            time.Hour,
 					TypeOfValue:     "interval",
 					Value: []Triplet{
@@ -250,8 +265,8 @@ var decodeTestTable = []struct {
 					MeterLocation:   "meterpoint4",
 					Meter:           "meter4",
 					Channel:         "1",
-					Start:           getTime("2020-03-27T00:00:00Z"),
-					Stop:            getTime("2020-03-28T00:00:00Z"),
+					Start:           getTime("2020-03-27T01:00:00Z"),
+					Stop:            getTime("2020-03-28T01:00:00Z"),
 					Step:            time.Hour,
 					Value: []Triplet{
 						{Value: 0, Quality: "x"},
@@ -292,8 +307,8 @@ var decodeTestTable = []struct {
 					MeterLocation:   "location5",
 					Meter:           "meter5",
 					Channel:         "1",
-					Start:           getTime("2020-03-27T00:00:00Z"),
-					Stop:            getTime("2020-03-28T00:00:00Z"),
+					Start:           getTime("2020-03-27T01:00:00Z"),
+					Stop:            getTime("2020-03-28T01:00:00Z"),
 					Step:            time.Hour,
 					Value: []Triplet{
 						{Value: 70.1},
@@ -347,8 +362,8 @@ var decodeTestTable = []struct {
 			TimeSeries: []TimeSeries{
 				{
 					Reference:       "meterpoint1",
-					Start:           getTime("2020-03-27T00:00:00Z"),
-					Stop:            getTime("2020-03-28T00:00:00Z"),
+					Start:           getTime("2020-03-27T01:00:00Z"),
+					Stop:            getTime("2020-03-28T01:00:00Z"),
 					Step:            time.Hour,
 					Unit:            "kWh",
 					TypeOfValue:     "interval",
@@ -384,8 +399,8 @@ var decodeTestTable = []struct {
 				},
 				{
 					Reference:       "meterpoint2",
-					Start:           getTime("2020-03-27T00:00:00Z"),
-					Stop:            getTime("2020-03-28T00:00:00Z"),
+					Start:           getTime("2020-03-27T01:00:00Z"),
+					Stop:            getTime("2020-03-28T01:00:00Z"),
 					Step:            time.Hour,
 					Unit:            "kWh",
 					TypeOfValue:     "interval",
@@ -423,8 +438,8 @@ var decodeTestTable = []struct {
 					Unit:            "kWh",
 					DirectionOfFlow: "out",
 					Meter:           "meter3",
-					Start:           getTime("2020-03-26T23:00:00Z"),
-					Stop:            getTime("2020-03-27T23:00:00Z"),
+					Start:           getTime("2020-03-27T00:00:00Z"),
+					Stop:            getTime("2020-03-28T00:00:00Z"),
 					Step:            time.Hour,
 					TypeOfValue:     "interval",
 					Value: []Triplet{
@@ -467,8 +482,8 @@ var decodeTestTable = []struct {
 					MeterLocation:   "meterpoint4",
 					Meter:           "meter4",
 					Channel:         "1",
-					Start:           getTime("2020-03-27T00:00:00Z"),
-					Stop:            getTime("2020-03-28T00:00:00Z"),
+					Start:           getTime("2020-03-27T01:00:00Z"),
+					Stop:            getTime("2020-03-28T01:00:00Z"),
 					Step:            time.Hour,
 					Value: []Triplet{
 						{Value: 0, Quality: "x"},
@@ -509,8 +524,8 @@ var decodeTestTable = []struct {
 					MeterLocation:   "location5",
 					Meter:           "meter5",
 					Channel:         "1",
-					Start:           getTime("2020-03-27T00:00:00Z"),
-					Stop:            getTime("2020-03-28T00:00:00Z"),
+					Start:           getTime("2020-03-27T01:00:00Z"),
+					Stop:            getTime("2020-03-28T01:00:00Z"),
 					Step:            time.Hour,
 					Value: []Triplet{
 						{Value: 70.1},
@@ -555,7 +570,7 @@ var decodeTestTable = []struct {
 				ID:           "0",
 				MessageType:  "Settlement-data",
 				Version:      "1.2",
-				Time:         getTime("2020-03-27T00:00:00Z"),
+				Time:         getTime("2020-03-27T01:00:00Z"),
 				To:           "MDM",
 				From:         "Sender",
 				GMTReference: 2,
@@ -564,8 +579,8 @@ var decodeTestTable = []struct {
 			TimeSeries: []TimeSeries{
 				{
 					Reference: "meterpoint1",
-					Start:     getTime("2020-03-27T00:00:00Z"),
-					Stop:      getTime("2020-03-27T10:00:00Z"),
+					Start:     getTime("2020-03-27T02:00:00Z"),
+					Stop:      getTime("2020-03-27T12:00:00Z"),
 					Step:      time.Hour,
 					Value: []Triplet{
 						{Value: 1},
@@ -584,8 +599,8 @@ var decodeTestTable = []struct {
 				},
 				{
 					Reference: "meterpoint2",
-					Start:     getTime("2020-03-27T00:00:00Z"),
-					Stop:      getTime("2020-03-27T10:00:00Z"),
+					Start:     getTime("2020-03-27T02:00:00Z"),
+					Stop:      getTime("2020-03-27T12:00:00Z"),
 					Step:      2 * time.Hour,
 					Value: []Triplet{
 						{Value: 0.001},
@@ -599,8 +614,8 @@ var decodeTestTable = []struct {
 				},
 				{
 					Reference: "meterpoint3",
-					Start:     getTime("2020-03-27T00:00:00Z"),
-					Stop:      getTime("2020-03-27T01:00:00Z"),
+					Start:     getTime("2020-03-27T02:00:00Z"),
+					Stop:      getTime("2020-03-27T03:00:00Z"),
 					Step:      15 * time.Minute,
 					Value: []Triplet{
 						{Value: 10001.01},
@@ -613,8 +628,8 @@ var decodeTestTable = []struct {
 				},
 				{
 					Reference: "meterpoint4",
-					Start:     getTime("2020-03-27T00:00:00Z"),
-					Stop:      getTime("2020-03-27T00:00:05Z"),
+					Start:     getTime("2020-03-27T02:00:00Z"),
+					Stop:      getTime("2020-03-27T02:00:05Z"),
 					Step:      time.Second,
 					Value: []Triplet{
 						{Value: 1.1},
