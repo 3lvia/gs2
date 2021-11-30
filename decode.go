@@ -94,7 +94,7 @@ func (d *Decoder) Decode() (*GS2, error) {
 }
 
 func gmtReferenceToOffset(gmtReference int) time.Duration {
-	return time.Hour * time.Duration(gmtReference)
+	return time.Hour * time.Duration(-gmtReference)
 }
 
 func (d *Decoder) decode(v reflect.Value) error {
