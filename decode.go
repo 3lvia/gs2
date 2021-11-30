@@ -80,8 +80,6 @@ func (d *Decoder) Decode() (*GS2, error) {
 		}
 	}
 
-	// fmt.Printf("Before parsing %v\n", result)
-
 	var gmtReference = result.StartMessage.GMTReference
 	for i := range result.MeterReadings {
 		result.MeterReadings[i].Time = result.MeterReadings[i].Time.Add(time.Hour * time.Duration(gmtReference))
@@ -92,7 +90,6 @@ func (d *Decoder) Decode() (*GS2, error) {
 		result.TimeSeries[i].Stop = result.TimeSeries[i].Stop.Add(time.Hour * time.Duration(gmtReference))
 	}
 
-	// fmt.Printf("After parsing %v\n", result)
 	return result, nil
 }
 
