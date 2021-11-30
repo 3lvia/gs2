@@ -1,13 +1,14 @@
 package main
 
 import (
-	"github.com/rejlersembriq/gs2"
 	"log"
 	"math"
 	"math/rand"
 	"os"
 	"strconv"
 	"time"
+
+	"github.com/3lvia/gs2"
 )
 
 const outputFile = "testdata/testFile.gs2"

@@ -80,7 +80,33 @@ func (d *Decoder) Decode() (*GS2, error) {
 		}
 	}
 
+	var gmtOffset = gmtReferenceToOffset(result.StartMessage.GMTReference)
+
+	result.StartMessage.Time = addGmtOffset(result.StartMessage.Time, gmtOffset)
+	result.EndMessage.Time = addGmtOffset(result.EndMessage.Time, gmtOffset)
+
+	for i := range result.MeterReadings {
+		result.MeterReadings[i].Time = addGmtOffset(result.MeterReadings[i].Time, gmtOffset)
+	}
+
+	for i := range result.TimeSeries {
+		result.TimeSeries[i].Start = addGmtOffset(result.TimeSeries[i].Start, gmtOffset)
+		result.TimeSeries[i].Stop = addGmtOffset(result.TimeSeries[i].Stop, gmtOffset)
+	}
+
 	return result, nil
+}
+
+func addGmtOffset(incomingTime time.Time, gmtOffset time.Duration) time.Time {
+	if (incomingTime == time.Time{}) {
+		return incomingTime
+	}
+
+	return incomingTime.Add(gmtOffset)
+}
+
+func gmtReferenceToOffset(gmtReference int) time.Duration {
+	return time.Hour * time.Duration(-gmtReference)
 }
 
 func (d *Decoder) decode(v reflect.Value) error {
