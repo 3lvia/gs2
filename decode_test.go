@@ -555,7 +555,7 @@ var decodeTestTable = []struct {
 				ID:           "0",
 				MessageType:  "Settlement-data",
 				Version:      "1.2",
-				Time:         getTime("2020-03-26T23:00:00Z"),
+				Time:         getTime("2020-03-26T22:00:00Z"),
 				To:           "MDM",
 				From:         "Sender",
 				GMTReference: 2,
