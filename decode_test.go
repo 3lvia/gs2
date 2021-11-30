@@ -1,7 +1,6 @@
 package gs2
 
 import (
-	"fmt"
 	"os"
 	"reflect"
 	"testing"
@@ -24,20 +23,6 @@ func TestDecoder_Decode(t *testing.T) {
 			t.Errorf("result does not equal expected in test %d from table", i)
 		}
 	}
-}
-
-func TestDecoder_ReadFile(t *testing.T) {
-	file, err := os.Open("testdata/timeseries_noNewlines.gs2")
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	result, err := NewDecoder(file).Decode()
-	if err != nil {
-		t.Fatalf("unexpected error when decoding: %v", err)
-	}
-
-	fmt.Printf("%v\n", result)
 }
 
 // This is probably stupid since we're also reading the file and stuff. Maybe there is some other way to benchmark?
@@ -81,7 +66,7 @@ var decodeTestTable = []struct {
 				ID:           "0",
 				MessageType:  "Settlement-data",
 				Version:      "1.2",
-				Time:         getTime("2019-07-22T05:37:40Z"),
+				Time:         getTime("2019-07-22T04:37:40Z"),
 				To:           "MDM",
 				From:         "Sender",
 				GMTReference: 1,
@@ -136,7 +121,7 @@ var decodeTestTable = []struct {
 				ID:           "0",
 				MessageType:  "Settlement-data",
 				Version:      "1.2",
-				Time:         getTime("2019-09-25T06:00:08Z"),
+				Time:         getTime("2019-09-25T05:00:08Z"),
 				To:           "MDM",
 				From:         "Sender",
 				GMTReference: 1,
@@ -353,7 +338,7 @@ var decodeTestTable = []struct {
 				ID:           "0",
 				MessageType:  "Settlement-data",
 				Version:      "1.2",
-				Time:         getTime("2019-09-25T06:00:08Z"),
+				Time:         getTime("2019-09-25T05:00:08Z"),
 				To:           "MDM",
 				From:         "Sender",
 				GMTReference: 1,
@@ -570,7 +555,7 @@ var decodeTestTable = []struct {
 				ID:           "0",
 				MessageType:  "Settlement-data",
 				Version:      "1.2",
-				Time:         getTime("2020-03-27T01:00:00Z"),
+				Time:         getTime("2020-03-26T23:00:00Z"),
 				To:           "MDM",
 				From:         "Sender",
 				GMTReference: 2,
