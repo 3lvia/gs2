@@ -27,7 +27,7 @@ func TestDecoder_Decode(t *testing.T) {
 }
 
 func TestDecoder_ReadFile(t *testing.T) {
-	file, err := os.Open("testdata/QM_AT20211018.gs2")
+	file, err := os.Open("testdata/meterreading.gs2")
 	if err != nil {
 		t.Fatal(err)
 	}

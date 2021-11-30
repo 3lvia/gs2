@@ -23,8 +23,8 @@ func main() {
 	rand.Seed(time.Now().Unix())
 
 	startMessage := getStartMessage()
-	meterReadings := generateMeterReadings(0, startMessage.GMTReference)
-	timeSeries := generateTimeSeries(1, startMessage.GMTReference)
+	meterReadings := generateMeterReadings(0)
+	timeSeries := generateTimeSeries(1)
 	endMessage := getEndMessage(len(meterReadings) + len(timeSeries) + 2)
 
 	g := gs2.GS2{
@@ -60,12 +60,11 @@ func getEndMessage(noOfObjects int) gs2.EndMessage {
 	}
 }
 
-func generateMeterReadings(numberOfReadings int, gmtReference int) []gs2.MeterReading {
+func generateMeterReadings(numberOfReadings int) []gs2.MeterReading {
 	var meterReadings []gs2.MeterReading
 
 	for i := 0; i < numberOfReadings; i++ {
 		meterReadings = append(meterReadings, generateMeterReading(i))
-		meterReadings[i].Time.Add(time.Hour * time.Duration(gmtReference))
 	}
 
 	return meterReadings
@@ -84,13 +83,11 @@ func generateMeterReading(n int) gs2.MeterReading {
 	}
 }
 
-func generateTimeSeries(numberofSeries int, gmtReference int) []gs2.TimeSeries {
+func generateTimeSeries(numberofSeries int) []gs2.TimeSeries {
 	var timeSeries []gs2.TimeSeries
 
 	for i := 0; i < numberofSeries; i++ {
 		timeSeries = append(timeSeries, generateTimeSerie(i))
-		timeSeries[i].Start.Add(time.Hour * time.Duration(gmtReference))
-		timeSeries[i].Stop.Add(time.Hour * time.Duration(gmtReference))
 	}
 
 	return timeSeries
