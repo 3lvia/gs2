@@ -479,7 +479,7 @@ func parseDuration(s string) (time.Duration, error) {
 			return 0, err
 		}
 
-		duration += durationUnits[i] * time.Duration(durationFactor)
+		duration += durationUnits[i] * time.Duration(timePartAsInt)
 	}
 
 	return duration, nil
