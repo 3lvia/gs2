@@ -470,22 +470,17 @@ func parseDuration(s string) (time.Duration, error) {
 	split := strings.Split(s, ".")
 	tp := strings.Split(split[1], ":")
 
-	var err error
-	var hours int
-	var minutes int
-	var seconds int
+	var duration time.Duration = 0
+	var durationUnits = [...]time.Duration{time.Hour, time.Minute, time.Second}
 
-	if hours, err = strconv.Atoi(tp[0]); err != nil {
-		return 0, err
+	for i, timePart := range tp {
+		var timePartAsInt, err = strconv.Atoi(timePart)
+		if err != nil {
+			return 0, err
+		}
+
+		duration += durationUnits[i] * time.Duration(timePartAsInt)
 	}
 
-	if minutes, err = strconv.Atoi(tp[1]); err != nil {
-		return 0, err
-	}
-
-	if seconds, err = strconv.Atoi(tp[2]); err != nil {
-		return 0, err
-	}
-
-	return time.Duration(hours)*time.Hour + time.Duration(minutes)*time.Minute + time.Duration(seconds)*time.Second, nil
+	return duration, nil
 }
