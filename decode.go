@@ -474,7 +474,7 @@ func parseDuration(s string) (time.Duration, error) {
 	var durationUnits = [...]time.Duration{time.Hour, time.Minute, time.Second}
 
 	for i, timePart := range tp {
-		var durationFactor, err = strconv.Atoi(timePart)
+		var timePartAsInt, err = strconv.Atoi(timePart)
 		if err != nil {
 			return 0, err
 		}
