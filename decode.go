@@ -371,6 +371,10 @@ func (d *Decoder) scanWhile(state int) {
 }
 
 func (d *Decoder) peek(n int) byte {
+	var bytesRead = d.bytesRead + n
+	if bytesRead >= len(d.buf) {
+		bytesRead = len(d.buf) - 1
+	}
 	return d.buf[d.bytesRead+n]
 }
 
