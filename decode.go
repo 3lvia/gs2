@@ -375,7 +375,7 @@ func (d *Decoder) peek(n int) byte {
 	if bytesRead >= len(d.buf) {
 		bytesRead = len(d.buf) - 1
 	}
-	return d.buf[d.bytesRead+n]
+	return d.buf[bytesRead]
 }
 
 func (d *Decoder) skipBlock() {
